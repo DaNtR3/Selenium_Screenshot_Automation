@@ -1,0 +1,16 @@
+
+#Ignore screenshots
+/screenshots/
+#Ignore newly created IUC docs
+/IUCs/
+#Ignore log files
+*.log
+#Ignore temp files
+*.tmp
+# Ignore .env file
+.env
+#Ignore IUC template
+/assets/FYXX IUC - User List Source_GeneralTemplate.pptx
+# Python cache files
+*.pyc
+__pycache__/
