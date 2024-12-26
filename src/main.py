@@ -20,9 +20,9 @@ class AppInitializer:
         self.user_login = SaviyntLogin(self.driver, self.username, self.password)
         self.textarea_handler = TextAreaHandler(self.driver)
         self.email_handler = EmailManager()
-        self.file_handler = FileHandler()
-        self.saviynt_navigation = SaviyntNavigationFeature(self.driver)
         self.screenshot_handler = ScreenshotHandler(self.driver, self.textarea_handler.expand_all_textareas_conn)
+        self.file_handler = FileHandler(self.screenshot_handler.screenshots_path)
+        self.saviynt_navigation = SaviyntNavigationFeature(self.driver)
         self.iuc_nav_logic = IUCNavigationFeature(self.driver)
 
 
@@ -38,9 +38,9 @@ class AppStart:
             return
         try:
             # Perform login
-            #success = self.initializer.user_login.login_to_saviynt()
-            if True:
-                '''self.initializer.iuc_nav_logic.security_system_feature(
+            success = self.initializer.user_login.login_to_saviynt()
+            if success:
+                self.initializer.iuc_nav_logic.security_system_feature(
                     self.initializer.saviynt_navigation.admin_panel,
                     self.initializer.saviynt_navigation.home_page,
                     self.initializer.screenshot_handler.take_screenshot
@@ -56,7 +56,7 @@ class AppStart:
                     self.initializer.saviynt_navigation.admin_panel,
                     self.initializer.saviynt_navigation.home_page,
                     self.initializer.screenshot_handler.scroll_and_capture
-                )'''
+                )
                 file_path = self.initializer.file_handler.add_screenshots_to_template()
                 self.initializer.email_handler.send_email(file_path)
                 
