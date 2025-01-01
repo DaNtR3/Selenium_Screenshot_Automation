@@ -1,8 +1,8 @@
 
 #Ignore screenshots
-/screenshots/
+/scripts/screenshots/
 #Ignore newly created IUC docs
-/IUCs/
+/scripts/IUCs/
 #Ignore log files
 *.log
 #Ignore temp files
@@ -10,7 +10,12 @@
 # Ignore .env file
 .env
 #Ignore IUC template
-/assets/FYXX IUC - User List Source_GeneralTemplate.pptx
+/scripts/assets/FYXX IUC - User List Source_GeneralTemplate.pptx
 # Python cache files
 *.pyc
 __pycache__/
+# Ignore saviynt data
+/models/saviynt_data.xlsx
+
+#Ignore images folder
+/static/images/*
