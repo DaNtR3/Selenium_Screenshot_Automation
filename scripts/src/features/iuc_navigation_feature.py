@@ -9,9 +9,9 @@ class IUCNavigationFeature:
         self.driver = driver
 
 
-    def security_system_feature(self, admin_nav_func, home_nav_func, take_screenshot_func):
+    def security_system_feature(self, admin_nav_func, home_nav_func, take_screenshot_func, systemkey, systemname):
         try:
-            print("Starting security system feature navigation...")
+            print(f"Starting security system feature navigation for systemkey: {systemkey}...")
 
             # First navigate to admin panel
             admin_nav_func()
@@ -56,10 +56,40 @@ class IUCNavigationFeature:
             time.sleep(1)
             security_system_opt.click()
 
+            #Click on search bar
+            ss_searchbar = WebDriverWait(self.driver, 10).until(
+                EC.presence_of_element_located(
+                    (
+                        By.CSS_SELECTOR,
+                        '[id="dtsearch_securitysystemsList"]',
+                    )
+                )
+            )
+            # Type the security system name in the search bar
+            ss_searchbar.clear()
+            for char in systemname:
+                ss_searchbar.send_keys(char)
+                time.sleep(0.1)
+            time.sleep(1)
+
+            # Search the security system
+            search_ss = WebDriverWait(self.driver, 10).until(
+                EC.presence_of_element_located(
+                    (
+                        By.CSS_SELECTOR,
+                        '[id="search_securitysystemsList"]',
+                    )
+                )
+            )
+            time.sleep(1)
+            search_ss.click()
+
+            time.sleep(3)
+
             # Click on decided security system
             click_security_system = WebDriverWait(self.driver, 10).until(
                 EC.presence_of_element_located(
-                    (By.CSS_SELECTOR, '[href="/ECM/securitysystems/show/1"]')
+                    (By.CSS_SELECTOR, f'[href="/ECM/securitysystems/show/{systemkey}"]')
                 )
             )
             time.sleep(1)
@@ -72,20 +102,20 @@ class IUCNavigationFeature:
 
             # If we're on the security page, capture
             if "securitysystems" in self.driver.current_url:
-                print("Starting capture...")
+                print(f"Starting capture for systemkey: {systemkey}...")
                 take_screenshot_func()
 
             print("Navigating back to home page...")
             home_nav_func()
 
         except Exception as e:
-            print(f"Error in security_system feature: {e}")
+            print(f"Error in security_system feature for systemkey: {systemkey}: {e}")
             raise
 
 
-    def endpoint_feature(self, admin_nav_func, home_nav_func, take_screenshot_func):
+    def endpoint_feature(self, admin_nav_func, home_nav_func, take_screenshot_func, endpointkey, endpoint_name):
         try:
-            print("Starting endpoint feature navigation...")
+            print(f"Starting endpoint feature navigation for endpointkey: {endpointkey}...")
 
             # First navigate to admin panel
             admin_nav_func()
@@ -137,10 +167,40 @@ class IUCNavigationFeature:
             time.sleep(1)
             endpoint_opt.click()
 
+            #Click on search bar
+            ep_searchbar = WebDriverWait(self.driver, 10).until(
+                EC.presence_of_element_located(
+                    (
+                        By.CSS_SELECTOR,
+                        '[id="dtsearch_endpointsList"]',
+                    )
+                )
+            )
+            # Type the endpoint name in the search bar
+            ep_searchbar.clear()
+            for char in endpoint_name:
+                ep_searchbar.send_keys(char)
+                time.sleep(0.1)
+            time.sleep(1)
+
+            # Search the endpoint
+            search_ep = WebDriverWait(self.driver, 10).until(
+                EC.presence_of_element_located(
+                    (
+                        By.CSS_SELECTOR,
+                        '[id="search_endpointsList"]',
+                    )
+                )
+            )
+            time.sleep(1)
+            search_ep.click()
+
+            time.sleep(3)
+
             # Click on decided endpoint
             click_endpoint = WebDriverWait(self.driver, 10).until(
                 EC.presence_of_element_located(
-                    (By.CSS_SELECTOR, '[href="/ECM/endpoints/show/768?savmodule="]')
+                    (By.CSS_SELECTOR, f'[href="/ECM/endpoints/show/{endpointkey}?savmodule="]')
                 )
             )
             time.sleep(1)
@@ -188,13 +248,13 @@ class IUCNavigationFeature:
             home_nav_func()
 
         except Exception as e:
-            print(f"Error in endpoint_feature: {e}")
+            print(f"Error in endpoint_feature for endpointkey: {endpointkey}: {e}")
             raise
 
 
-    def connection_feature(self, admin_nav_func, home_nav_func, scroll_capture_func):
+    def connection_feature(self, admin_nav_func, home_nav_func, scroll_capture_func, connectionkey):
         try:
-            print("Starting connection feature navigation...")
+            print(f"Starting connection feature navigation for connectionkey: {connectionkey}...")
 
             # First navigate to admin panel
             admin_nav_func()
@@ -203,7 +263,7 @@ class IUCNavigationFeature:
             # Navigate to connection page
             print("Navigating to connection page...")
             self.driver.get(
-                "https://uat-mckesson.ssmcloud.net/ECM/ecmConfig/addnewconnection/26"
+                f"https://uat-mckesson.ssmcloud.net/ECM/ecmConfig/addnewconnection/{connectionkey}"
             )
 
             # Wait for page load
@@ -213,12 +273,12 @@ class IUCNavigationFeature:
 
             # If we're on the connection page, scroll and capture
             if "addnewconnection" in self.driver.current_url:
-                print("Starting scroll and capture...")
+                print(f"Starting scroll and capture for connectionkey: {connectionkey}...")
                 scroll_capture_func()
 
             print("Navigating back to home page...")
             home_nav_func()
 
         except Exception as e:
-            print(f"Error in connection_feature: {e}")
+            print(f"Error in connection_feature for connectionkey: {connectionkey}: {e}")
             raise

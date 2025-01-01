@@ -15,7 +15,7 @@ class EmailManager:
         self.smtp_port = int(os.getenv("SMTP_PORT"))
         self.receiver_email = 'Daniel.Sibaja1@ibm.com'
         self.subject = None
-        self.email_template_path = 'C:\DEV\Py_Selenium_Script 1\email\email.template.html'
+        self.email_template_path = 'C:\DEV\Py_Selenium_Script 1\scripts\email\email.template.html'
         self.subject_prefix="IUC Document"
 
     def load_email_template(self):

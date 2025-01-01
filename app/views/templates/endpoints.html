@@ -1,0 +1,127 @@
+{% extends "base.html" %} {% block title %}IUC Maker - Endpoints{% endblock %}
+{% block content %}
+<section class="intro">
+  <h2>Endpoints</h2>
+  <p>Information about endpoints.</p>
+</section>
+
+<section class="search-bar">
+  <form action="{{ url_for('views.endpoints') }}" method="GET">
+    <input
+      type="text"
+      name="query"
+      placeholder="Search endpoints..."
+      value="{{ request.args.get('query', '') }}"
+    />
+    <button type="submit" class="btn btn-search">
+      <img
+        src="{{ url_for('static', filename='images/search_icon.png') }}"
+        alt="Search"
+        class="icon"
+      />
+    </button>
+  </form>
+</section>
+
+<section class="data-table">
+  <table>
+    <thead>
+      <tr>
+        <th>Endpoint</th>
+        <th>Display name</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in data %}
+      <tr>
+        <td>{{ row.ENDPOINT_NAME }}</td>
+        <td>{{ row.ENDPOINT_DISPLAYNAME }}</td>
+        <td>
+          <div class="action-buttons">
+            <button
+              type="button"
+              id="select-endpoints-{{ row.ENDPOINT_KEY }}"
+              class="btn btn-select"
+              onclick="addToCart('{{ row.ENDPOINT_KEY }}','endpoints', '{{ row.ENDPOINT_NAME }}', '{{ row.ENDPOINT_DISPLAYNAME }}')"
+            >
+              <img
+                src="{{ url_for('static', filename='images/cart_icon.png') }}"
+                alt="Select"
+                class="icon"
+              />
+            </button>
+            <button
+              type="button"
+              id="remove-endpoints-{{ row.ENDPOINT_KEY}}"
+              class="btn btn-remove"
+              onclick="removeFromCart('{{ row.ENDPOINT_KEY }}','endpoints', '{{ row.ENDPOINT_NAME }}')"
+              disabled
+            >
+              <img
+                src="{{ url_for('static', filename='images/remove_icon.png') }}"
+                alt="Remove"
+                class="icon"
+              />
+            </button>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<section class="pagination">
+  <ul>
+    {% if page > 1 %}
+    <li>
+      <a
+        href="{{ url_for('views.endpoints', page=page-1, query=request.args.get('query', '')) }}"
+        >Previous</a
+      >
+    </li>
+    {% endif %} {% set start_page = 1 if page <= 6 else page - 5 %} {% set
+    end_page = total_pages if page + 4 >= total_pages else page + 4 %} {% if
+    start_page > 1 %}
+    <li>
+      <a
+        href="{{ url_for('views.endpoints', page=1, query=request.args.get('query', '')) }}"
+        >1</a
+      >
+    </li>
+    {% if start_page > 2 %}
+    <li>...</li>
+    {% endif %} {% endif %} {% for p in range(start_page, end_page + 1) %}
+    <li>
+      <a
+        href="{{ url_for('views.endpoints', page=p, query=request.args.get('query', '')) }}"
+        class="{% if p == page %}active{% endif %}"
+        >{{ p }}</a
+      >
+    </li>
+    {% endfor %} {% if end_page < total_pages %} {% if end_page < total_pages -
+    1 %}
+    <li>...</li>
+    {% endif %}
+    <li>
+      <a
+        href="{{ url_for('views.endpoints', page=total_pages, query=request.args.get('query', '')) }}"
+        >{{ total_pages }}</a
+      >
+    </li>
+    {% endif %} {% if page < total_pages %}
+    <li>
+      <a
+        href="{{ url_for('views.endpoints', page=page+1, query=request.args.get('query', '')) }}"
+        >Next</a
+      >
+    </li>
+    {% endif %}
+  </ul>
+</section>
+
+<p class="padding-top">Total Records: {{ total_items }}</p>
+<p class="padding-top">Page {{ page }} of {{ total_pages }}</p>
+
+{% endblock %}

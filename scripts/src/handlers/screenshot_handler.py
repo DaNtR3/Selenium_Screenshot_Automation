@@ -12,7 +12,7 @@ class ScreenshotHandler:
         # Generate a unique folder name for the screenshots
         self.temp_folder = self.generate_unique_folder_name()
         # Directory for saving screenshots
-        self.screenshots_path = f'C:\DEV\Py_Selenium_Script 1\screenshots\{self.temp_folder}'
+        self.screenshots_path = f'C:\DEV\Py_Selenium_Script 1\scripts\screenshots\{self.temp_folder}'
 
     def take_screenshot(self):
         """Take a screenshot of the current page."""

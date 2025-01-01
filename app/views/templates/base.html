@@ -1,0 +1,66 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}IUC Maker{% endblock %}</title>
+    <!-- Link to the CSS file -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+    <!-- Link of custom font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Link to the Favicon -->
+    <link
+      rel="icon"
+      href="{{ url_for('static', filename='images/mckesson_fav_icon.png') }}"
+      type="image/x-icon"
+    />
+  </head>
+
+  <body>
+    <!-- Header Section -->
+    <header>
+      <div>
+        <h1>
+          <a href="{{ url_for('views.home') }}"
+            ><img
+              src="{{ url_for('static', filename='images/mckesson_logo.png') }}"
+              alt="Logo"
+              class="logo_img"
+          /></a>
+        </h1>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="{{ url_for('views.home') }}">Home</a></li>
+          <li>
+            <a href="{{ url_for('views.security_systems') }}"
+              >Security systems</a
+            >
+          </li>
+          <li><a href="{{ url_for('views.endpoints') }}">Endpoints</a></li>
+          <li><a href="{{ url_for('views.about') }}">About</a></li>
+          <li>
+            <a href="{{ url_for('views.cart') }}"> Cart </a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <!-- Main Content Section -->
+    <main>{% block content %}{% endblock %}</main>
+
+    <!-- Footer Section -->
+    <footer>
+      <p>&copy; 2025 - Mckesson. All Rights Reserved.</p>
+    </footer>
+    <!-- Link to the JavaScript file -->
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+  </body>
+</html>

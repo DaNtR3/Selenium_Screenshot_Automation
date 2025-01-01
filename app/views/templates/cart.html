@@ -1,0 +1,97 @@
+{% extends "base.html" %} {% block title %}IUC Maker - Cart{% endblock %} {%
+block content %}
+<section class="intro">
+  <h2>Items in Your Cart</h2>
+  <p>Information about the picked items.</p>
+</section>
+
+<section class="cart-table">
+  {% if cart.security_systems or cart.endpoints %} {% if cart.security_systems
+  %}
+  <div class="cart-section">
+    <h3>Security Systems</h3>
+    <table class="cart-table">
+      <thead>
+        <tr>
+          <th>Security system</th>
+          <th>Display Name</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in cart.security_systems %}
+        <tr>
+          <td>{{ item.name }}</td>
+          <td>{{ item.displayname }}</td>
+          <td>
+            <button
+              type="button"
+              class="btn btn-remove"
+              onclick="removeFromCart('{{ item.id }}','security_systems','{{ item.name }}')"
+            >
+              <img
+                src="{{ url_for('static', filename='images/remove_icon.png') }}"
+                alt="Select"
+                class="icon"
+              />
+            </button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %} {% if cart.endpoints %}
+  <div class="cart-section">
+    <h3>Endpoints</h3>
+    <table class="cart-table">
+      <thead>
+        <tr>
+          <th>Endpoint</th>
+          <th>Display Name</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in cart.endpoints %}
+        <tr>
+          <td>{{ item.name }}</td>
+          <td>{{ item.displayname }}</td>
+          <td>
+            <button
+              type="button"
+              class="btn btn-remove"
+              onclick="removeFromCart('{{ item.id }}','endpoints', '{{ item.name }}')"
+            >
+              <img
+                src="{{ url_for('static', filename='images/remove_icon.png') }}"
+                alt="Select"
+                class="icon"
+              />
+            </button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+
+  <div class="cart-section">
+    {% if cart.security_systems and cart.endpoints %}
+    <button type="button" id="submit-request" class="btn btn-select">
+      Submit request
+    </button>
+    {% endif %} {% if cart.security_systems or cart.endpoints %}
+    <button type="button" id="clear-cart" class="btn btn-remove">
+      Clear Cart
+    </button>
+    {% endif %}
+  </div>
+
+  {% else %}
+  <p>Your cart is empty!</p>
+  {% endif %}
+</section>
+
+{% endblock %}

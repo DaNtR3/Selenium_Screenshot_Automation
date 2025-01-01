@@ -1,0 +1,47 @@
+{% extends "base.html" %} {% block title %}IUC Maker - Home{% endblock %}
+{%block content %}
+
+<!-- Main Content Section -->
+<main>
+  <section class="intro">
+    <h2>Welcome to IUC Maker!</h2>
+    <p>Create your own IUC document in just a few minutes with automation</p>
+    <p>Explore our options and start now!</p>
+  </section>
+
+  <section class="features">
+    <div class="feature-box">
+      <a href="{{ url_for('views.security_systems')}}">
+        <img
+          src="{{ url_for('static', filename='images/security_systems_icon.png')}}"
+          alt="ss_icon"
+          class="clickable-image"
+        />
+        <hr class="divider" />
+        <h3>Security systems</h3>
+        <p>
+          The security system represents the connection between Saviynt and the
+          target application.
+        </p>
+      </a>
+    </div>
+    <div class="feature-box">
+      <a href="{{ url_for('views.endpoints')}}">
+        <img
+          src="{{ url_for('static', filename='images/endpoints_icon.png')}}"
+          alt="ep_icon"
+          class="clickable-image"
+        />
+        <hr class="divider" />
+        <div>
+          <h3>Endpoints</h3>
+          <p>
+            An endpoint is the target application from where Saviynt imports
+            data and performs provisioning or deprovisioning.
+          </p>
+        </div>
+      </a>
+    </div>
+  </section>
+</main>
+{% endblock %}

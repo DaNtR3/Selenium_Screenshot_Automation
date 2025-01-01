@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}404 - Page Not Found{% endblock %}
+
+{% block content %}
+<section class="error-page">
+    <h2>404 - Page Not Found</h2>
+    <img
+        src="{{ url_for('static', filename='images/404-error_icon.png')}}"
+        alt="404_icon"
+        class="error-img"
+      />
+    <p>Sorry, the page you are looking for does not exist.</p>
+    <p><a href="{{ url_for('views.home') }}" >Go back to the homepage</a></p>
+</section>
+{% endblock %}
