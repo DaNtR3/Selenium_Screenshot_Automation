@@ -3,15 +3,57 @@ import shutil
 from datetime import datetime
 from pptx import Presentation
 from pptx.util import Inches
+from pathlib import Path
+from azure.storage.blob import BlobServiceClient
+from io import BytesIO
 
 
 class FileHandler:
 
     def __init__(self, temp_folder_path):
-        self.pptx_template_path = "C:/DEV/Py_Selenium_Script 1/scripts/assets/FYXX IUC - User List Source_GeneralTemplate.pptx"
+        self.pptx_template_path = self.get_blob_ppt_template()
         self.screenshots_path = temp_folder_path
         self.new_file_path = None
         self.file_name_prefix = "IUC"
+
+    
+    def get_blob_ppt_template(self):
+        try:
+            # 1. Retrieve the connection string from the environment variables
+            connection_string = os.getenv('AZURE_STORAGE_CONNECTION_STRING')
+            if not connection_string:
+                raise ValueError("Connection string not found in environment variables!")
+
+            # 2. Retrieve the container name and blob file name from environment variables
+            container_name = os.getenv('AZURE_BLOB_CONTAINER_NAME')
+            blob_name = os.getenv('AZURE_BLOB_FILE_NAME_2') 
+
+            if not container_name or not blob_name:
+                raise ValueError("Container name or Blob file name not found in environment variables!")
+
+            # Get the current date and time
+            current_datetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            print(f"Using container: {container_name}, blob: {blob_name}, at {current_datetime}")
+
+            # 3. Initialize BlobServiceClient using the connection string
+            blob_service_client = BlobServiceClient.from_connection_string(connection_string)
+            container_client = blob_service_client.get_container_client(container_name)
+
+            # 4. Download the PowerPoint file from Azure Blob Storage
+            blob_client = container_client.get_blob_client(blob_name)
+            blob_data = blob_client.download_blob()
+
+            # 5. Read the downloaded data into memory (in-memory file)
+            file_bytes = blob_data.readall()  # Read the file content into bytes
+            pptx_data = BytesIO(file_bytes)  # Convert byte content to a BytesIO object (in-memory file)
+
+            return pptx_data
+
+        except ValueError as ve:
+            print(f"ValueError occurred: {ve}")
+        except Exception as e:
+            print(f"An error occurred: {e}")
+
 
     def add_screenshots_to_template(self):
         try:
@@ -95,17 +137,26 @@ class FileHandler:
             unique_filename = self.generate_unique_filename()
 
             if unique_filename:
-                # Construct the full file path
-                file_path = (
-                    f"C:\DEV\Py_Selenium_Script 1\scripts\IUCs\{unique_filename}.pptx"
-                )
-                return file_path
+                # Get the current working directory (cross-platform)
+                current_directory = Path(__file__).parent.parent.parent
+
+                # Define the relative base directory for your "IUCs" folder
+                base_directory = current_directory / 'IUCs'
+                
+                # Construct the full file path using pathlib (handles different OS path formats)
+                file_path = base_directory / f"{unique_filename}.pptx"
+
+                print(f"Generated file path: {file_path}")
+
+                # Convert to string to return it as a file path
+                return str(file_path)
             else:
                 return None
         except Exception as e:
             # Catch any exception
             print(f"Error occurred while generating the file path: {e}")
             return None
+        
 
     def generate_unique_filename(self):
         try:

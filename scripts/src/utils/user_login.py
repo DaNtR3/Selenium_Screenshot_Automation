@@ -17,15 +17,15 @@ class SaviyntLogin:
             self.driver.delete_all_cookies()
 
             # Go to Google's main page first
-            self.driver.get("https://www.google.com")
-            time.sleep(2)
+            #self.driver.get("https://www.google.com")
+            #time.sleep(2)
 
             # Then go to Saviynt UAT
             self.driver.get("https://uat-mckesson.ssmcloud.net/ECMv6/request/requestHome")
-            time.sleep(6)
+            #time.sleep(6)
 
             # Enter username
-            username_field = WebDriverWait(self.driver, 10).until(
+            username_field = WebDriverWait(self.driver, 60).until(
                 EC.presence_of_element_located((By.ID, "input44"))
             )
 
@@ -33,23 +33,23 @@ class SaviyntLogin:
             username_field.clear()
             for char in self.username:
                 username_field.send_keys(char)
-                time.sleep(0.1)
-            time.sleep(1)
+                #time.sleep(0.1)
+            #time.sleep(1)
 
             # Click sign in button
-            sign_in_button = WebDriverWait(self.driver, 10).until(
+            sign_in_button = WebDriverWait(self.driver, 60).until(
                 EC.element_to_be_clickable((By.XPATH, '//*[@id="form36"]/div[2]/input'))
             )
-            time.sleep(1)
+            #time.sleep(1)
             sign_in_button.click()
 
             # Click Okta push button
-            push_button = WebDriverWait(self.driver, 10).until(
+            push_button = WebDriverWait(self.driver, 60).until(
                 EC.element_to_be_clickable(
                     (By.CSS_SELECTOR, '[data-se="okta_verify-push"] a')
                 )
             )
-            time.sleep(1)
+            #time.sleep(1)
             push_button.click()
 
 
@@ -64,20 +64,20 @@ class SaviyntLogin:
             password_field.clear()
             for char in self.password:
                 password_field.send_keys(char)
-                time.sleep(0.1)
-            time.sleep(1)
+                #time.sleep(0.1)
+            #time.sleep(1)
 
             # Click verify button
-            verify_button = WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located(
+            verify_button = WebDriverWait(self.driver, 60).until(
+                EC.element_to_be_clickable(
                     (By.CSS_SELECTOR, '[class="button button-primary"]')
                 )
             )
-            time.sleep(1)
+            #time.sleep(1)
             verify_button.click()
 
             # Wait for the page to load fully
-            time.sleep(5)
+            #time.sleep(2)
 
             print("Successfully logged in to Saviynt UAT!")
 

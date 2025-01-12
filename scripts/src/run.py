@@ -1,4 +1,5 @@
 import os
+import time
 import argparse
 import json
 from dotenv import load_dotenv
@@ -37,6 +38,7 @@ class AppStart:
         self.connection_keys = json.loads(connection_keys) if connection_keys else []
 
     def main(self):
+        start_time = time.time()
         if not self.initializer.username or not self.initializer.password:
             print("Please set OKTA_USERNAME and CYBERARK_PASSWORD environment variables")
             return
@@ -85,6 +87,10 @@ class AppStart:
         finally:
             if self.initializer.driver:
                 self.initializer.driver.quit()
+            end_time = time.time()  # Capture end time in seconds
+            duration_seconds = end_time - start_time  # Calculate duration in seconds
+            duration_minutes = duration_seconds / 60  # Convert duration to minutes
+            print(f"Process completed in {duration_minutes:.2f} minutes")  # Print time in minutes
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

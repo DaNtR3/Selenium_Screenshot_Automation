@@ -4,6 +4,7 @@ import time
 import string
 import random
 from datetime import datetime
+from pathlib import Path
 
 class ScreenshotHandler:
     def __init__(self, driver, text_area_handler):
@@ -11,11 +12,15 @@ class ScreenshotHandler:
         self.text_area_handler = text_area_handler
         # Generate a unique folder name for the screenshots
         self.temp_folder = self.generate_unique_folder_name()
+        # Dynamically get the absolute path based on the current script location
+        self.project_root = Path(__file__).resolve().parent.parent.parent
         # Directory for saving screenshots
-        self.screenshots_path = f'C:\DEV\Py_Selenium_Script 1\scripts\screenshots\{self.temp_folder}'
-
+        self.screenshots_path = self.project_root / 'screenshots' / self.temp_folder
+        
+        
     def take_screenshot(self):
         """Take a screenshot of the current page."""
+        print(f"Screenshots will be saved to: {self.screenshots_path}")
         try:
             # Create directory if it doesn't exist
             os.makedirs(self.screenshots_path, exist_ok=True)
@@ -29,8 +34,8 @@ class ScreenshotHandler:
             full_path = os.path.join(self.screenshots_path, filename)
             
             # Ensure page is loaded
-            time.sleep(2)
-            
+            time.sleep(1)
+        
             # Take the actual screenshot
             screenshot = pyautogui.screenshot()
             screenshot.save(full_path)
@@ -58,7 +63,7 @@ class ScreenshotHandler:
                 
                 # Scroll to the current position
                 self.driver.execute_script(f"window.scrollTo(0, {scroll_position});")
-                time.sleep(2)  # Wait for dynamic content to load
+                #time.sleep(1.5)  # Wait for dynamic content to load
                 
                 # Get current scroll position
                 current_scroll_position = self.driver.execute_script("return window.scrollY")

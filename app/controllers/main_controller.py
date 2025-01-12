@@ -1,13 +1,58 @@
+import os
 import pandas as pd
 from flask import session
+from azure.storage.blob import BlobServiceClient
+from io import BytesIO
+from datetime import datetime
+
+
+def get_blob_saviynt_data():
+    try:
+        # 1. Retrieve the connection string from the environment variables
+        connection_string = os.getenv('AZURE_STORAGE_CONNECTION_STRING')
+        if not connection_string:
+            raise ValueError("Connection string not found in environment variables!")
+
+        # 2. Retrieve the container name and blob file name from environment variables
+        container_name = os.getenv('AZURE_BLOB_CONTAINER_NAME')
+        blob_name = os.getenv('AZURE_BLOB_FILE_NAME_1')
+
+        if not container_name or not blob_name:
+            raise ValueError("Container name or Blob file name not found in environment variables!")
+        # Get the current date and time
+        current_datetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+        #print(f"Using container: {container_name}, blob: {blob_name}")
+        print(f"Using container: {container_name}, blob: {blob_name}, at {current_datetime}")
+
+        # 3. Initialize BlobServiceClient using the connection string
+        blob_service_client = BlobServiceClient.from_connection_string(connection_string)
+        container_client = blob_service_client.get_container_client(container_name)
+
+        # 4. Download the Excel file from Azure Blob Storage
+        blob_client = container_client.get_blob_client(blob_name)
+        blob_data = blob_client.download_blob()
+
+        # 5. Read the downloaded data into a pandas DataFrame
+        file_bytes = blob_data.readall()  # Read the file content into bytes
+        excel_data = BytesIO(file_bytes)  # Convert byte content to a BytesIO object (in-memory file)
+
+        # 6. Use pandas to read the Excel file into a DataFrame
+        df = pd.read_excel(excel_data)
+
+        # Return the DataFrame
+        return df
+
+    except ValueError as ve:
+        print(f"ValueError occurred: {ve}")
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
 
 def get_security_systems_data(page, per_page, query=None):
+
     try:
-        # Read the Excel file
-        df = pd.read_excel(
-            "C://DEV\Py_Selenium_Script 1//app//models//saviynt_data.xlsx"
-        )
+        df=get_blob_saviynt_data()
 
         # Select specific columns and remove duplicates
         df = df[
@@ -51,12 +96,9 @@ def get_security_systems_data(page, per_page, query=None):
         return [], 0, 0
 
 
-def get_endpoints_data(page, per_page, query=None):
+def get_endpoints_data(page, per_page, df, query=None):
     try:
-        # Read the Excel file
-        df = pd.read_excel(
-            "C://DEV\Py_Selenium_Script 1//app//models//saviynt_data.xlsx"
-        )
+        df=get_blob_saviynt_data()
 
         # Select specific columns and remove duplicates
         df = df[

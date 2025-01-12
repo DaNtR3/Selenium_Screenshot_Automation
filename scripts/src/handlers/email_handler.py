@@ -1,4 +1,5 @@
 import smtplib
+from pathlib import Path
 import os
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -13,9 +14,9 @@ class EmailManager:
         self.password = os.getenv("EMAIL_PASSWORD")
         self.smtp_server = os.getenv("SMTP_SERVER")
         self.smtp_port = int(os.getenv("SMTP_PORT"))
-        self.receiver_email = 'Daniel.Sibaja1@ibm.com'
+        self.receiver_email = os.getenv("EMAIL_RECEIVER")
         self.subject = None
-        self.email_template_path = 'C:\DEV\Py_Selenium_Script 1\scripts\email\email.template.html'
+        self.email_template_path = Path(__file__).parent.parent.parent / 'email' / 'email.template.html'
         self.subject_prefix="IUC Document"
 
     def load_email_template(self):

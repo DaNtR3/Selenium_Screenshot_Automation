@@ -15,49 +15,49 @@ class IUCNavigationFeature:
 
             # First navigate to admin panel
             admin_nav_func()
-            time.sleep(3)
+            #time.sleep(3)
 
             # Navigate to connection page
             print("Navigating to security system page...")
 
             # Go to left panel
-            left_panel = WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located(
+            left_panel = WebDriverWait(self.driver, 60).until(
+                EC.element_to_be_clickable(
                     (
                         By.CSS_SELECTOR,
                         '[class="MuiButtonBase-root MuiIconButton-root Header_iconHover__1Z89H"][aria-label="menu"]',
                     )
                 )
             )
-            time.sleep(1)
+            #time.sleep(1)
             left_panel.click()
 
             # Go to identity repository
-            idrepo_opt = WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located(
+            idrepo_opt = WebDriverWait(self.driver, 60).until(
+                EC.element_to_be_clickable(
                     (
                         By.CSS_SELECTOR,
-                        '[class="MuiButtonBase-root MuiIconButton-root sidebar-expand-icon"][aria-label="Identity Repository"]',
+                        '[class="MuiButtonBase-root MuiIconButton-root sidebar-expand-icon"][type="button"][aria-label="Identity Repository"]',
                     )
                 )
             )
-            time.sleep(1)
+            #time.sleep(1)
             idrepo_opt.click()
 
             # Go to security system tab
-            security_system_opt = WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located(
+            security_system_opt = WebDriverWait(self.driver, 60).until(
+                EC.element_to_be_clickable(
                     (
                         By.CSS_SELECTOR,
-                        '[class="MuiButtonBase-root MuiListItem-root sidebar_sidebarItemHover__3ESE5 MuiListItem-dense MuiListItem-button"][aria-label="Security System"]',
+                        '[href="/ECM/securitysystems/list"]',
                     )
                 )
             )
-            time.sleep(1)
+            #time.sleep(0.5)
             security_system_opt.click()
 
             #Click on search bar
-            ss_searchbar = WebDriverWait(self.driver, 10).until(
+            ss_searchbar = WebDriverWait(self.driver, 60).until(
                 EC.presence_of_element_located(
                     (
                         By.CSS_SELECTOR,
@@ -69,34 +69,34 @@ class IUCNavigationFeature:
             ss_searchbar.clear()
             for char in systemname:
                 ss_searchbar.send_keys(char)
-                time.sleep(0.1)
-            time.sleep(1)
+                #time.sleep(0.1)
+            #time.sleep(1)
 
             # Search the security system
-            search_ss = WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located(
+            search_ss = WebDriverWait(self.driver, 60).until(
+                EC.element_to_be_clickable(
                     (
                         By.CSS_SELECTOR,
                         '[id="search_securitysystemsList"]',
                     )
                 )
             )
-            time.sleep(1)
+            #time.sleep(1)
             search_ss.click()
 
-            time.sleep(3)
+            #time.sleep(2)
 
             # Click on decided security system
-            click_security_system = WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located(
+            click_security_system = WebDriverWait(self.driver, 60).until(
+                EC.element_to_be_clickable(
                     (By.CSS_SELECTOR, f'[href="/ECM/securitysystems/show/{systemkey}"]')
                 )
             )
-            time.sleep(1)
+            #time.sleep(1)
             click_security_system.click()
 
             # Wait for page load
-            WebDriverWait(self.driver, 20).until(
+            WebDriverWait(self.driver, 60).until(
                 EC.presence_of_element_located((By.TAG_NAME, "body"))
             )
 
@@ -119,56 +119,56 @@ class IUCNavigationFeature:
 
             # First navigate to admin panel
             admin_nav_func()
-            time.sleep(3)
+            #time.sleep(3)
 
             # Navigate to connection page
             print("Navigating to endpoint page...")
 
             # Go to left panel
-            left_panel = WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located(
+            left_panel = WebDriverWait(self.driver, 60).until(
+                EC.element_to_be_clickable(
                     (
                         By.CSS_SELECTOR,
                         '[class="MuiButtonBase-root MuiIconButton-root Header_iconHover__1Z89H"][aria-label="menu"]',
                     )
                 )
             )
-            time.sleep(1)
+            #time.sleep(1)
             left_panel.click()
 
             # Go to identity repository
-            idrepo_opt = WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located(
+            idrepo_opt = WebDriverWait(self.driver, 60).until(
+                EC.element_to_be_clickable(
                     (
                         By.CSS_SELECTOR,
-                        '[class="MuiButtonBase-root MuiIconButton-root sidebar-expand-icon"][aria-label="Identity Repository"]',
+                        '[class="MuiButtonBase-root MuiIconButton-root sidebar-expand-icon"][type="button"][aria-label="Identity Repository"]',
                     )
                 )
             )
-            time.sleep(1)
+            #time.sleep(5)
             idrepo_opt.click()
 
             # Go to security system tab
-            security_system_opt = WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located(
+            security_system_opt = WebDriverWait(self.driver, 60).until(
+                EC.element_to_be_clickable(
                     (
                         By.CSS_SELECTOR,
-                        '[class="MuiButtonBase-root MuiListItem-root sidebar_sidebarItemHover__3ESE5 MuiListItem-dense MuiListItem-button"][aria-label="Security System"]',
+                        '[href="/ECM/securitysystems/list"]',
                     )
                 )
             )
-            time.sleep(1)
+            #time.sleep(0.5)
             security_system_opt.click()
 
             # Go to endpoint tab
-            endpoint_opt = WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, '[href="#tab_2-2"]'))
+            endpoint_opt = WebDriverWait(self.driver, 60).until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, '[href="#tab_2-2"]'))
             )
-            time.sleep(1)
+            #time.sleep(1)
             endpoint_opt.click()
 
             #Click on search bar
-            ep_searchbar = WebDriverWait(self.driver, 10).until(
+            ep_searchbar = WebDriverWait(self.driver, 60).until(
                 EC.presence_of_element_located(
                     (
                         By.CSS_SELECTOR,
@@ -180,45 +180,45 @@ class IUCNavigationFeature:
             ep_searchbar.clear()
             for char in endpoint_name:
                 ep_searchbar.send_keys(char)
-                time.sleep(0.1)
-            time.sleep(1)
+                #time.sleep(0.1)
+            #time.sleep(1)
 
             # Search the endpoint
-            search_ep = WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located(
+            search_ep = WebDriverWait(self.driver, 60).until(
+                EC.element_to_be_clickable(
                     (
                         By.CSS_SELECTOR,
                         '[id="search_endpointsList"]',
                     )
                 )
             )
-            time.sleep(1)
+            #time.sleep(1)
             search_ep.click()
 
-            time.sleep(3)
+            #time.sleep(3)
 
             # Click on decided endpoint
-            click_endpoint = WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located(
+            click_endpoint = WebDriverWait(self.driver, 60).until(
+                EC.element_to_be_clickable(
                     (By.CSS_SELECTOR, f'[href="/ECM/endpoints/show/{endpointkey}?savmodule="]')
                 )
             )
-            time.sleep(1)
+            #time.sleep(1)
             click_endpoint.click()
 
             # Click on accounts tab
-            accounts_tab = WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located(
+            accounts_tab = WebDriverWait(self.driver, 60).until(
+                EC.element_to_be_clickable(
                     (By.XPATH, '//a[contains(text(), "Accounts")]')
                 )
             )
-            time.sleep(1)
+            #time.sleep(1)
             accounts_tab.click()
 
-            time.sleep(5)
+            #time.sleep(5)
 
             # Wait for page load
-            WebDriverWait(self.driver, 20).until(
+            WebDriverWait(self.driver, 60).until(
                 EC.presence_of_element_located(
                     (By.XPATH, '//th[contains(text(), "Account Name")]')
                 )
@@ -228,17 +228,17 @@ class IUCNavigationFeature:
             take_screenshot_func()
 
             # Click on entitlements tab
-            entitlements_tab = WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located(
+            entitlements_tab = WebDriverWait(self.driver, 60).until(
+                EC.element_to_be_clickable(
                     (By.XPATH, '//a[contains(text(), "Entitlements")]')
                 )
             )
-            time.sleep(1)
+            #time.sleep(1)
             entitlements_tab.click()
 
-            # Wait for page load
-            WebDriverWait(self.driver, 20).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, '[role="alert"]'))
+            # Wait for the page load (up to 60 seconds)
+            WebDriverWait(self.driver, 60).until(
+                EC.presence_of_element_located((By.XPATH, "//*[contains(@id, 'EntitlementValueList')]/tbody"))
             )
 
             print("Starting capture for entitlements...")
@@ -258,7 +258,7 @@ class IUCNavigationFeature:
 
             # First navigate to admin panel
             admin_nav_func()
-            time.sleep(3)
+            #time.sleep(3)
 
             # Navigate to connection page
             print("Navigating to connection page...")
@@ -267,7 +267,7 @@ class IUCNavigationFeature:
             )
 
             # Wait for page load
-            WebDriverWait(self.driver, 20).until(
+            WebDriverWait(self.driver, 60).until(
                 EC.presence_of_element_located((By.TAG_NAME, "body"))
             )
 

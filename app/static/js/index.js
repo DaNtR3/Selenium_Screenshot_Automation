@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
+    fetchCart();
+
     // Function to update button states based on cart items
     function updateButtonStates(cart) {
         cart.security_systems.forEach(item => {
@@ -19,6 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+    
 
     // Function to show a toast notification and conditionally reload the page
     function showToast(message, type) {
@@ -44,15 +47,23 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Fetch the cart items from the server
-    fetch('/views/get_cart')
-        .then(response => response.json())
-        .then(cart => {
-            console.log(cart);
-            updateButtonStates(cart);
-        })
-        .catch(error => {
-            console.error('Error fetching cart items:', error);
-        });
+        function fetchCart() {
+            fetch('/views/get_cart')
+            .then(response => {
+                console.log(response);  // Log the response to see its status and details
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(cart => {
+                console.log(cart);  // Log the cart data
+                updateButtonStates(cart);
+            })
+            .catch(error => {
+                console.error('Error fetching cart data:', error);
+            });
+    }
 
      // Function to add an item to the cart
      function addToCart(key, category, name, displayname, connectionkey, connectionname) {
@@ -60,6 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Check if the item is already in the cart
         fetch('/views/get_cart')
+        
             .then(response => response.json())
             .then(cart => {
                 let isInCart = false;
@@ -251,4 +263,5 @@ document.addEventListener('DOMContentLoaded', function() {
     // Expose functions to the global scope
     window.addToCart = addToCart;
     window.removeFromCart = removeFromCart;
+
 });

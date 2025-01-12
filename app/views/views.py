@@ -11,6 +11,7 @@ from controllers.main_controller import add_to_cart
 from controllers.main_controller import remove_from_cart
 from controllers.main_controller import clear_cart
 from controllers.main_controller import validate_cart
+from pathlib import Path
 
 
 views = Blueprint("views", __name__, template_folder="templates")
@@ -132,7 +133,7 @@ def get_cart_route():
         ],
     }
     print(categorized_cart)
-    return jsonify(categorized_cart)
+    return jsonify(categorized_cart), 200
 
 
 @views.route("/submit_cart", methods=["POST"])
@@ -172,10 +173,19 @@ def submit_cart_route():
 
     # Call the external script with the keys as arguments
     try:
+        # Dynamically get the path to the script directory
+        script_dir = Path(__file__).resolve().parent.parent.parent
+        # Build the path to your run.py script
+        script_path = script_dir / "scripts" / "src" / "run.py"
+        
+        # Ensure the path is correct (for debugging purposes)
+        print(f"Running script at: {script_path}")
+
+        # Call the external script with the keys as arguments
         result = subprocess.run(
             [
                 "python",
-                "C:\\DEV\\Py_Selenium_Script 1\\scripts\\src\\run.py",
+                str(script_path),  # Convert Path object to string
                 "--security_systems", security_systems_json,
                 "--endpoints", endpoints_json,
                 "--connection_keys", connection_keys_json,
@@ -198,8 +208,3 @@ def submit_cart_route():
 def clear_cart_route():
     response, status_code = clear_cart()
     return jsonify(response), status_code
-
-
-@views.route("/profile/<username>")
-def profile(username):
-    return render_template("index.html", name=username)
