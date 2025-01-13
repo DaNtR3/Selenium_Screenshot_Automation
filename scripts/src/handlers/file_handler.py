@@ -11,36 +11,42 @@ from io import BytesIO
 class FileHandler:
 
     def __init__(self, temp_folder_path):
-        self.pptx_template_path = self.get_blob_ppt_template()
+        self.connection_string = os.getenv('AZURE_STORAGE_CONNECTION_STRING')
+        self.container_name = os.getenv('AZURE_BLOB_CONTAINER_NAME')
+        self.blob_name_pptx_template = os.getenv('AZURE_BLOB_FILE_NAME_PPTX_TEMPLATE') 
+        self.container_name_iuc_backup = os.getenv('AZURE_BLOB_CONTAINER_NAME_IUC_BACKUP')
+
+        # Validate environment variables
+        self._validate_env_variables()
+
+        self.pptx_template_path = self.get_blob_pptx_template()
         self.screenshots_path = temp_folder_path
         self.new_file_path = None
         self.file_name_prefix = "IUC"
-
     
-    def get_blob_ppt_template(self):
+    def _validate_env_variables(self):
+        """Validate that all the necessary environment variables are set."""
+        if not self.connection_string:
+            raise ValueError("Connection string not found in environment variables!")
+        if not self.container_name:
+            raise ValueError("Container name not found in environment variables!")
+        if not self.blob_name_pptx_template:
+            raise ValueError("Blob file name for PPTX template not found in environment variables!")
+        if not self.container_name_iuc_backup:
+            raise ValueError("Container name not found in environment variables!")
+
+    def get_blob_pptx_template(self):
         try:
-            # 1. Retrieve the connection string from the environment variables
-            connection_string = os.getenv('AZURE_STORAGE_CONNECTION_STRING')
-            if not connection_string:
-                raise ValueError("Connection string not found in environment variables!")
-
-            # 2. Retrieve the container name and blob file name from environment variables
-            container_name = os.getenv('AZURE_BLOB_CONTAINER_NAME')
-            blob_name = os.getenv('AZURE_BLOB_FILE_NAME_2') 
-
-            if not container_name or not blob_name:
-                raise ValueError("Container name or Blob file name not found in environment variables!")
-
             # Get the current date and time
             current_datetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            print(f"Using container: {container_name}, blob: {blob_name}, at {current_datetime}")
+            print(f"Using container: {self.container_name}, blob: {self.blob_name_pptx_template}, at {current_datetime}")
 
             # 3. Initialize BlobServiceClient using the connection string
-            blob_service_client = BlobServiceClient.from_connection_string(connection_string)
-            container_client = blob_service_client.get_container_client(container_name)
+            blob_service_client = BlobServiceClient.from_connection_string(self.connection_string)
+            container_client = blob_service_client.get_container_client(self.container_name)
 
             # 4. Download the PowerPoint file from Azure Blob Storage
-            blob_client = container_client.get_blob_client(blob_name)
+            blob_client = container_client.get_blob_client(self.blob_name_pptx_template)
             blob_data = blob_client.download_blob()
 
             # 5. Read the downloaded data into memory (in-memory file)
@@ -122,6 +128,9 @@ class FileHandler:
             # Remove the temporary screenshots folder
             self.remove_temporary_folder()
 
+            # Upload the new PowerPoint file to Azure Blob Storage
+            self.upload_pptx_to_azure()
+
             return self.new_file_path
 
         except FileNotFoundError as e:
@@ -169,6 +178,17 @@ class FileHandler:
             # Catch any exception
             print(f"Error occurred while generating the unique name: {e}")
             return None
+        
+    def remove_file(self, file_path):
+        """Remove the file after the email has been sent."""
+        try:
+            if os.path.exists(file_path):
+                os.remove(file_path)
+                print(f"Successfully removed the file: {file_path}")
+            else:
+                print(f"File not found: {file_path}")
+        except Exception as e:
+            print(f"Error removing file: {e}")
 
     def remove_temporary_folder(self):
         try:
@@ -189,3 +209,19 @@ class FileHandler:
             print(f"Error: Permission denied. {e}")
         except Exception as e:
             print(f"An unexpected error occurred: {e}")
+
+    def upload_pptx_to_azure(self):
+
+        """Upload the PowerPoint file to Azure Blob Storage."""
+        try:
+            # Initialize the BlobServiceClient
+            blob_service_client = BlobServiceClient.from_connection_string(self.connection_string)
+            blob_client = blob_service_client.get_blob_client(self.container_name_iuc_backup, self.new_file_path)
+
+            # Upload the file to Azure Blob Storage
+            with open(self.new_file_path, "rb") as data:
+                blob_client.upload_blob(data, overwrite=True)
+
+            print(f"Uploaded {self.new_file_path} to Azure Blob Storage.")
+        except Exception as e:
+            print(f"Error uploading to Azure: {e}")

@@ -38,6 +38,7 @@ def security_systems():
         page=page,
         total_pages=total_pages,
         total_items=total_items,
+        query=query
     )
 
 
@@ -56,6 +57,7 @@ def endpoints():
         page=page,
         total_pages=total_pages,
         total_items=total_items,
+        query=query
     )
 
 

@@ -1,4 +1,5 @@
 import os
+import re
 import pandas as pd
 from flask import session
 from azure.storage.blob import BlobServiceClient
@@ -15,7 +16,7 @@ def get_blob_saviynt_data():
 
         # 2. Retrieve the container name and blob file name from environment variables
         container_name = os.getenv('AZURE_BLOB_CONTAINER_NAME')
-        blob_name = os.getenv('AZURE_BLOB_FILE_NAME_1')
+        blob_name = os.getenv('AZURE_BLOB_FILE_NAME_TEST_DATA')
 
         if not container_name or not blob_name:
             raise ValueError("Container name or Blob file name not found in environment variables!")
@@ -67,10 +68,12 @@ def get_security_systems_data(page, per_page, query=None):
 
         # Filter the data based on the search query
         if query:
+            # Escape special characters in the query
+            escaped_query = re.escape(query)
             df = df[
-                df["SECURITY_SYSTEM_NAME"].str.contains(query, case=False, na=False)
+                df["SECURITY_SYSTEM_NAME"].str.contains(escaped_query, case=False, na=False, regex=True)
                 | df["SECURITY_SYSTEM_DISPLAYNAME"].str.contains(
-                    query, case=False, na=False
+                    escaped_query, case=False, na=False, regex=True
                 )
             ]
 
@@ -96,7 +99,7 @@ def get_security_systems_data(page, per_page, query=None):
         return [], 0, 0
 
 
-def get_endpoints_data(page, per_page, df, query=None):
+def get_endpoints_data(page, per_page, query=None):
     try:
         df=get_blob_saviynt_data()
 
@@ -107,9 +110,11 @@ def get_endpoints_data(page, per_page, df, query=None):
 
         # Filter the data based on the search query
         if query:
+            # Escape special characters in the query
+            escaped_query = re.escape(query)
             df = df[
-                df["ENDPOINT_NAME"].str.contains(query, case=False, na=False)
-                | df["ENDPOINT_DISPLAYNAME"].str.contains(query, case=False, na=False)
+                df["ENDPOINT_NAME"].str.contains(escaped_query, case=False, na=False, regex=True)
+                | df["ENDPOINT_DISPLAYNAME"].str.contains(escaped_query, case=False, na=False, regex=True)
             ]
 
         # Calculate pagination

@@ -10,6 +10,7 @@ block content %}
   %}
   <div class="cart-section">
     <h3>Security Systems</h3>
+    <p>Total items: {{ cart.security_systems|length }}</p>
     <table class="cart-table">
       <thead>
         <tr>
@@ -44,6 +45,7 @@ block content %}
   {% endif %} {% if cart.endpoints %}
   <div class="cart-section">
     <h3>Endpoints</h3>
+    <p>Total items: {{ cart.endpoints|length }}</p>
     <table class="cart-table">
       <thead>
         <tr>

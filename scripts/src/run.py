@@ -80,8 +80,8 @@ class AppStart:
                         connection_key
                     )
                 file_path = self.initializer.file_handler.add_screenshots_to_template()
-                self.initializer.email_handler.send_email(file_path)
-                print(f"Screenshots saved to: {file_path}")
+                self.initializer.email_handler.send_email(file_path, self.initializer.file_handler.remove_file)
+                
         except Exception as e:
             print(f"An error occurred: {e}")
         finally:

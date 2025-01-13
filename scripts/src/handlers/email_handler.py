@@ -47,7 +47,7 @@ class EmailManager:
             print(f"Error occurred while generating the unique subject: {e}")
             return None  
         
-    def send_email(self, file_attachment_path):
+    def send_email(self, file_attachment_path, remove_file_func):
         try:
             # Creating unique subject line
             self.subject = self.generate_unique_subject()
@@ -100,6 +100,9 @@ class EmailManager:
                 print(f"Error sending email: {e}")
             finally:
                 server.quit()
+                remove_file_func(file_attachment_path)
 
         except Exception as e:
             print(f"Unexpected error: {e}")
+
+    
